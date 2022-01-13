@@ -11,7 +11,6 @@ from setuptools import setup
 
 
 #spot plating
-#current limitations: workable with one sheet only
 root = Tk()
 root.geometry("400x400")
 
@@ -20,7 +19,7 @@ class drop_spot_plating():
         df['raw_cells_1'] = df['No_of_cells.1'] / df['Amount Plated'] / df['Dilution']
         df['raw_cells_2'] = df['No_of_cells.2'] / df['Amount Plated'] / df['Dilution']
         df['raw_cells_3'] = df['No_of_cells.3'] / df['Amount Plated'] / df['Dilution']
-        df['Average_CFU'] = (df.iloc[:, 10:13].sum(axis=1) / 3) * (df['Volume (mL)'] / df['Mass (g)'])
+        df['Average_CFU'] = (df.iloc[:, 10:13].sum(skipna=True, axis=1) / 3) * (df['Volume (mL)'] / df['Mass (g)'])
         df['Total_CFU'] = df['Average_CFU'].groupby(df['Type']).transform('mean')
         df['STDEV'] = df['Average_CFU'].groupby(df['Type']).transform('std')
         df['CV %'] = (df['STDEV'] / df['Total_CFU']) * 100
@@ -59,13 +58,13 @@ class drop_spot_plating():
         final_df.to_excel(writer, sheet_name='SUMMARY', index=False)
         writer.save()
         label['text'] = "Saved!"
-# ds = drop_spot_plating()
+
 class spot_plating_time():
     def spot_time(self):
         df_spot['raw_cells_1'] = df_spot['No_of_cells.1'] / df_spot['Amount Plated'] / df_spot['Dilution']
         df_spot['raw_cells_2'] = df_spot['No_of_cells.2'] / df_spot['Amount Plated'] / df_spot['Dilution']
         df_spot['raw_cells_3'] = df_spot['No_of_cells.3'] / df_spot['Amount Plated'] / df_spot['Dilution']
-        df_spot['Average_CFU'] = (df_spot.iloc[:, 11:14].sum(axis=1) / 3) * (df_spot['Volume (mL)'] / df_spot['Mass (g)'])
+        df_spot['Average_CFU'] = (df_spot.iloc[:, 11:14].sum(skipna=True, axis=1) / 3) * (df_spot['Volume (mL)'] / df_spot['Mass (g)'])
         df_spot['Total_CFU'] = df_spot['Average_CFU'].groupby(df_spot['Type']).transform('mean')
         df_spot['STDEV'] = df_spot['Average_CFU'].groupby(df_spot['Type']).transform('std')
         df_spot['CV %'] = (df_spot['STDEV'] / df_spot['Total_CFU']) * 100
@@ -94,7 +93,6 @@ class spot_plating_time():
             y1 = final_df_spot_time.iloc[1::2, 2]
             yerror = final_df_spot_time.iloc[0::2, 3]
             y1error = final_df_spot_time.iloc[1::2, 3]
-            ##set minimum spec##
 
             ax = fig.add_subplot(111)
             ax.set_yscale('log')
@@ -220,7 +218,7 @@ class spot_plating_time():
 
 class spiral_plating():
     def spiral(self):
-        dfs['Average_CFU'] = (dfs.iloc[:, 5:8].sum(axis=1) / 3) * (dfs['Volume (mL)'] / dfs['Mass (g)'])
+        dfs['Average_CFU'] = (dfs.iloc[:, 5:8].sum(skipna=True, axis=1) / 3) * (dfs['Volume (mL)'] / dfs['Mass (g)'])
         dfs['Total_CFU'] = dfs['Average_CFU'].groupby(dfs['Type']).transform('mean')
         dfs['STDEV'] = dfs['Average_CFU'].groupby(dfs['Type']).transform('std')
         dfs['CV %'] = (dfs['STDEV'] / dfs['Total_CFU']) * 100
@@ -261,7 +259,7 @@ class spiral_plating():
 
 class spiral_plating_time():
     def spiral(self):
-        dff['Average_CFU'] = (dff.iloc[:, 6:9].sum(axis=1) / 3) * (dff['Volume (mL)'] / dff['Mass (g)'])
+        dff['Average_CFU'] = (dff.iloc[:, 6:9].sum(skipna=True, axis=1) / 3) * (dff['Volume (mL)'] / dff['Mass (g)'])
         dff['Total_CFU'] = dff['Average_CFU'].groupby(dff['Type']).transform('mean')
         dff['STDEV'] = dff['Average_CFU'].groupby(dff['Type']).transform('std')
         dff['CV %'] = (dff['STDEV'] / dff['Total_CFU']) * 100
